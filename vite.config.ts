@@ -4,9 +4,6 @@ import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
-  server: {
-            host: '0.0.0.0'
-  },
   plugins: [
     tailwindcss(),
     react({
@@ -15,4 +12,14 @@ export default defineConfig({
       },
     }),
   ],
+  server: {
+    host: '0.0.0.0',
+    proxy: {
+      '/api': {
+        target: 'http://127.0.0.1:3000', // Your Flask server address
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''), // Optional: remove /api prefix if not used in Flask routes
+      },
+    },
+  },
 })
